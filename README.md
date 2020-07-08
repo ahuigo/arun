@@ -25,6 +25,9 @@ NOTE: This tool has nothing to do with hot-deploy for production.
 * Support excluding subdirectories
 * Allow watching new directories after Air started
 * Better building process
+## todo
+- [] Loop time run
+- [] Support clean up
 
 ## Installation
 
@@ -138,8 +141,9 @@ make install
 BTW: Pull requests are welcome~
 
 ## Sponsor
-
-<a href="https://www.buymeacoffee.com/36lcNbW" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/36lcNbW" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" >
+</a>
 
 Huge thanks to the following supporters. I've always been remembering your kindness.
 

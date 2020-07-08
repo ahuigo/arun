@@ -1,4 +1,4 @@
-module github.com/cosmtrek/air
+module github.com/ahuigo/watchrun
 
 go 1.12
 
