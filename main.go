@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ahuigo/watchrun/runner"
+	"github.com/ahuigo/arun/runner"
 )
 
 var (

@@ -23,6 +23,7 @@ type Engine struct {
 	eventCh       chan string
 	watcherStopCh chan bool
 	binStopCh     chan bool
+	binStopEndCh  chan bool
 	exitCh        chan bool
 
 	mu         sync.RWMutex
@@ -56,6 +57,7 @@ func NewEngine(cfgPath string, debugMode bool) (*Engine, error) {
 		eventCh:       make(chan string, 1000),
 		watcherStopCh: make(chan bool, 10),
 		binStopCh:     make(chan bool),
+		binStopEndCh:  make(chan bool, 1),
 		exitCh:        make(chan bool),
 		binRunning:    false,
 		watchers:      0,
@@ -194,6 +196,7 @@ func (e *Engine) watchNewDir(dir string, removeDir bool) {
 func (e *Engine) start() {
 	firstRunCh := make(chan bool, 1)
 	firstRunCh <- true
+	e.binStopEndCh <- true
 
 	for {
 		var filename string
@@ -215,11 +218,14 @@ func (e *Engine) start() {
 		}
 
 		e.withLock(func() {
+			e.mainDebug("binRuning: %v", e.binRunning)
 			if e.binRunning {
 				e.binStopCh <- true
 			}
 		})
 		e.mainLog("start build run ...")
+
+		<-e.binStopEndCh
 		go e.buildRun()
 	}
 }
@@ -280,11 +286,13 @@ func (e *Engine) runBin() error {
 		if err != nil {
 			e.mainDebug("failed to kill PID %d, error: %s", pid, err.Error())
 			if cmd.ProcessState != nil && !cmd.ProcessState.Exited() {
+				e.mainDebug("Process not exited!!!!")
 				os.Exit(1)
 			}
 		} else {
 			e.mainDebug("cmd killed, pid: %d", pid)
 		}
+		e.binStopEndCh <- true
 		e.withLock(func() {
 			e.binRunning = false
 		})
