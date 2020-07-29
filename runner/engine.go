@@ -1,6 +1,7 @@
 package runner
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
@@ -42,6 +43,7 @@ func NewEngine(cfgPath string, debugMode bool) (*Engine, error) {
 	}
 	args := parseArgv()
 	cfg.Build.Bin = args.Cmd
+	fmt.Printf("%#v", args.Cmd)
 
 	logger := newLogger(cfg)
 	watcher, err := fsnotify.NewWatcher()

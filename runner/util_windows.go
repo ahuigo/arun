@@ -4,7 +4,6 @@ import (
 	"io"
 	"os/exec"
 	"strconv"
-	"strings"
 )
 
 func (e *Engine) killCmd(cmd *exec.Cmd) (pid int, err error) {
@@ -14,14 +13,15 @@ func (e *Engine) killCmd(cmd *exec.Cmd) (pid int, err error) {
 	return pid, kill.Run()
 }
 
-func (e *Engine) startCmd(cmd string) (*exec.Cmd, io.ReadCloser, io.ReadCloser, error) {
+func (e *Engine) startCmd(cmd []string) (*exec.Cmd, io.ReadCloser, io.ReadCloser, error) {
 	var err error
 
-	if !strings.Contains(cmd, ".exe") {
-		e.runnerLog("CMD will not recognize non .exe file for execution, path: %s", cmd)
-	}
+	// if !strings.Contains(cmd, ".exe") {
+	// 	e.runnerLog("CMD will not recognize non .exe file for execution, path: %s", cmd)
+	// }
 
-	c := exec.Command("cmd", "/c", cmd)
+	// c := exec.Command("cmd", "/c", cmd)
+	c := exec.Command(cmd[0], cmd[1:]...)
 	stderr, err := c.StderrPipe()
 	if err != nil {
 		return nil, nil, nil, err

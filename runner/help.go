@@ -3,15 +3,15 @@ package runner
 import (
 	"fmt"
 	"os"
-	"strings"
 )
 
 // Args todo
 type Args struct {
-	Debug   string
-	Cmd     string
-	Verbose bool
-	Help    bool
+	Debug      string
+	Cmd        []string
+	Verbose    bool
+	Help       bool
+	IgnoreDirs []string
 }
 
 func parseArgv() *Args {
@@ -27,6 +27,11 @@ func parseArgv() *Args {
 			switch v {
 			case "-h":
 				args.Help = true
+			case "-i":
+				i++
+				if i < argsLen {
+					args.IgnoreDirs = append(args.IgnoreDirs, os.Args[i])
+				}
 			case "-d":
 				i++
 				if i < argsLen {
@@ -39,7 +44,7 @@ func parseArgv() *Args {
 		}
 	}
 	if i < argsLen {
-		args.Cmd = strings.Join(os.Args[i:], " ")
+		args.Cmd = os.Args[i:]
 	} else {
 		args.Help = true
 	}
@@ -48,7 +53,7 @@ func parseArgv() *Args {
 
 const helpDesc = `
 Usage:
-	watchdo [options] command arguments......
+	arun [options] command arguments......
 options:
 	-d <item> 	Debug Item
 	-h			Help
@@ -56,7 +61,7 @@ options:
 	-s			Keep Silent, without log output
 	-l <seconds> loop execute(run command every n seconds)
 example:
-	watchdo 
+	arun
 `
 
 // Help help

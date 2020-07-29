@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"time"
 
 	"github.com/imdario/mergo"
@@ -28,8 +27,8 @@ type config struct {
 
 type cfgBuild struct {
 	Cmd           string        `toml:"cmd"`
-	Bin           string        `toml:"bin"`
-	FullBin       string        `toml:"full_bin"`
+	Bin           []string      `toml:"bin"`
+	FullBin       []string      `toml:"full_bin"`
 	Log           string        `toml:"log"`
 	IncludeExt    []string      `toml:"include_ext"`
 	ExcludeDir    []string      `toml:"exclude_dir"`
@@ -80,21 +79,26 @@ func initConfig(path string) (cfg *config, err error) {
 		return nil, err
 	}
 	err = cfg.preprocess()
+	args := parseArgv()
+	for _, dir := range args.IgnoreDirs {
+		cfg.Build.ExcludeDir = append(cfg.Build.ExcludeDir, dir)
+	}
+
 	return cfg, err
 }
 
 func defaultConfig() config {
 	build := cfgBuild{
 		Cmd:         "go build -o ./tmp/main .",
-		Bin:         "./tmp/main",
+		Bin:         []string{"./tmp/main"},
 		Log:         "build-errors.log",
 		IncludeExt:  []string{"go", "tpl", "tmpl", "html"},
-		ExcludeDir:  []string{"assets", "tmp", "vendor"},
+		ExcludeDir:  []string{"docs", "assets", "tmp", "vendor"},
 		Delay:       1000,
 		StopOnError: true,
 	}
 	if runtime.GOOS == "windows" {
-		build.Bin = `tmp\main.exe`
+		build.Bin = []string{`tmp\main.exe`}
 		build.Cmd = "go build -o ./tmp/main.exe ."
 	}
 	log := cfgLog{
@@ -157,34 +161,34 @@ func (c *config) preprocess() error {
 	// Use the unix configuration on Windows
 	if runtime.GOOS == "windows" {
 
-		runName := "start"
-		extName := ".exe"
-		originBin := c.Build.Bin
+		// runName := "start"
+		// extName := ".exe"
+		// originBin := c.Build.Bin
 
-		if 0 < len(c.Build.FullBin) {
+		// if 0 < len(c.Build.FullBin) {
 
-			if !strings.HasSuffix(c.Build.FullBin, extName) {
-				c.Build.FullBin += extName
-			}
-			if !strings.HasPrefix(c.Build.FullBin, runName) {
-				c.Build.FullBin = runName + " " + c.Build.FullBin
-			}
-		}
+		// 	if !strings.HasSuffix(c.Build.FullBin, extName) {
+		// 		c.Build.FullBin += extName
+		// 	}
+		// 	if !strings.HasPrefix(c.Build.FullBin, runName) {
+		// 		c.Build.FullBin = runName + " " + c.Build.FullBin
+		// 	}
+		// }
 
 		// bin=/tmp/main  cmd=go build -o ./tmp/main.exe main.go
-		if !strings.Contains(c.Build.Cmd, c.Build.Bin) && strings.Contains(c.Build.Cmd, originBin) {
-			c.Build.Cmd = strings.Replace(c.Build.Cmd, originBin, c.Build.Bin, 1)
-		}
+		// if !strings.Contains(c.Build.Cmd, c.Build.Bin) && strings.Contains(c.Build.Cmd, originBin) {
+		// 	c.Build.Cmd = strings.Replace(c.Build.Cmd, originBin, c.Build.Bin, 1)
+		// }
 	}
 
 	c.Build.ExcludeDir = ed
-	if len(c.Build.FullBin) > 0 {
-		c.Build.Bin = c.Build.FullBin
-		return err
-	}
+	// if len(c.Build.FullBin) > 0 {
+	// 	c.Build.Bin = c.Build.FullBin
+	// 	return err
+	// }
 	// Fix windows CMD processor
 	// CMD will not recognize relative path like ./tmp/server
-	c.Build.Bin, err = filepath.Abs(c.Build.Bin)
+	// c.Build.Bin, err = filepath.Abs(c.Build.Bin)
 	return err
 }
 
@@ -217,9 +221,9 @@ func (c *config) fullPath(path string) string {
 	return filepath.Join(c.Root, path)
 }
 
-func (c *config) binPath() string {
-	return filepath.Join(c.Root, c.Build.Bin)
-}
+// func (c *config) binPath() string {
+// 	return filepath.Join(c.Root, c.Build.Bin)
+// }
 
 func (c *config) tmpPath() string {
 	return filepath.Join(c.Root, c.TmpDir)
