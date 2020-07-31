@@ -55,7 +55,7 @@ const helpDesc = `
 Usage:
 	arun [options] command arguments......
 options:
-	-d <item> 	Debug Item
+	-d <item>	Debug Item
 	-h			Help
 	-i 			Specify Ignore Directory
 	-v <level>	Verbose Level

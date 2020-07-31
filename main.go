@@ -26,12 +26,11 @@ func init() {
 
 func main() {
 	fmt.Printf(`
-      ___                   
-     /   |  _______  ______ 
-    / /| | / ___/ / / / __ \
-   / ___ |/ /  / /_/ / / / /
-  /_/  |_/_/   \__,_/_/ /_/ v%s // live reload for any command, with Go%s
-
+    █████  ██████  ██    ██ ███    ██ 
+   ██   ██ ██   ██ ██    ██ ████   ██ 
+   ███████ ██████  ██    ██ ██ ██  ██ 
+   ██   ██ ██   ██ ██    ██ ██  ██ ██ 
+   ██   ██ ██   ██  ██████  ██   ████  v%s // live reload for any command, with Go%s
 `, arunVersion, goVersion)
 
 	if showVersion {
