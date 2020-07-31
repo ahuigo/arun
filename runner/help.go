@@ -57,12 +57,14 @@ Usage:
 options:
 	-d <item> 	Debug Item
 	-h			Help
+	-i 			Specify Ignore Directory
 	-v <level>	Verbose Level
 	-s			Keep Silent, without log output
-	-l <seconds> loop execute(run command every n seconds)
 example:
-	arun
+	arun go run main.go
 `
+
+// -l <seconds> loop execute(run command every n seconds)
 
 // Help help
 func Help() {

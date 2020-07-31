@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	dftConf = ".air.conf"
-	airWd   = "air_wd"
+	dftConf = ".arun.conf"
+	arunWd  = "arun_wd"
 )
 
 type config struct {
@@ -58,8 +58,8 @@ type cfgMisc struct {
 
 func initConfig(path string) (cfg *config, err error) {
 	if path == "" {
-		// when path is blank, first find `.air.conf` in `air_wd` and current working directory, if not found, use defaults
-		if wd := os.Getenv(airWd); wd != "" {
+		// when path is blank, first find `.arun.conf` in `arun_wd` and current working directory, if not found, use defaults
+		if wd := os.Getenv(arunWd); wd != "" {
 			path = filepath.Join(wd, dftConf)
 		} else {
 			path, err = dftConfPath()
@@ -138,7 +138,7 @@ func readConfigOrDefault(path string) (*config, error) {
 
 func (c *config) preprocess() error {
 	var err error
-	cwd := os.Getenv(airWd)
+	cwd := os.Getenv(arunWd)
 	if cwd != "" {
 		if err = os.Chdir(cwd); err != nil {
 			return err

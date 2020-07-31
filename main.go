@@ -26,11 +26,13 @@ func init() {
 
 func main() {
 	fmt.Printf(`
-  __     ___  
- / /\   | |_) 
-/_/--\  |_| \_       v%s // live reload for Go apps, with Go%s
+      ___                   
+     /   |  _______  ______ 
+    / /| | / ___/ / / / __ \
+   / ___ |/ /  / /_/ / / / /
+  /_/  |_/_/   \__,_/_/ /_/ v%s // live reload for any command, with Go%s
 
-`, airVersion, goVersion)
+`, arunVersion, goVersion)
 
 	if showVersion {
 		return

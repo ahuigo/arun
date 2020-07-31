@@ -1,12 +1,12 @@
 FROM golang:1.14
 
-MAINTAINER Rick Yu <cosmtrek@gmail.com>
+MAINTAINER Ahuigo <ahuigo@qq.com>
 
 ENV GOPATH /go
 ENV GO111MODULE on
 
-COPY . /go/src/github.com/cosmtrek/air
-WORKDIR /go/src/github.com/cosmtrek/air
+COPY . /go/src/github.com/ahuigo/arun
+WORKDIR /go/src/github.com/ahuigo/arun
 RUN make ci && make install
 
-ENTRYPOINT ["/go/bin/air"]
+ENTRYPOINT ["/go/bin/arun"]

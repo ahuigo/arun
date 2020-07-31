@@ -29,19 +29,19 @@ build: check
 
 .PHONY: install
 install: check
-	@echo "Installing air..."
+	@echo "Installing arun..."
 	@$(GO) install -ldflags '$(LDFLAGS)'
 
 .PHONY: release
 release: check
-	GOOS=darwin GOARCH=amd64 $(GO) build -ldflags '$(LDFLAGS)' -o bin/darwin/air
-	GOOS=linux GOARCH=amd64 $(GO) build -ldflags '$(LDFLAGS)' -o bin/linux/air
-	GOOS=windows GOARCH=amd64 $(GO) build -ldflags '$(LDFLAGS)' -o bin/windows/air.exe
+	GOOS=darwin GOARCH=amd64 $(GO) build -ldflags '$(LDFLAGS)' -o bin/darwin/aun
+	GOOS=linux GOARCH=amd64 $(GO) build -ldflags '$(LDFLAGS)' -o bin/linux/arun
+	GOOS=windows GOARCH=amd64 $(GO) build -ldflags '$(LDFLAGS)' -o bin/windows/aun.exe
 
 .PHONY: docker-image
 docker-image:
-	docker build -t cosmtrek/air:v1.12.1 -f ./Dockerfile .
+	docker build -t ahuigo/arun:v0.1.1 -f ./Dockerfile .
 
 .PHONY: push-docker-image
 push-docker-image:
-	docker push cosmtrek/air:v1.12.1
+	docker push ahuigo/arun:v0.1.1
