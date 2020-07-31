@@ -47,7 +47,7 @@ go get -u github.com/ahuigo/arun
     options:
         -d <item> 	Debug Item
         -h			Help
-        -i 			Specify Ignore Directory
+        -i 			Ignore Directory
         -v <level>	Verbose Level
         -s			Keep Silent, without log output
     example:
