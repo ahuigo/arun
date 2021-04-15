@@ -45,3 +45,8 @@ docker-image:
 .PHONY: push-docker-image
 push-docker-image:
 	docker push ahuigo/arun:v0.1.1
+
+
+pkg:
+	newversion.py version
+	jfrog "rt" "go-publish" "go-pl" $$(cat version) "--url=https://artifactory.momenta.works/artifactory" --user=$$GOPROXY_USER --apikey=$$GOPROXY_PASS
