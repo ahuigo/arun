@@ -147,7 +147,6 @@ func (e *Engine) watchDir(path string) error {
 			case <-e.watcherStopCh:
 				return
 			case ev := <-e.watcher.Events:
-				e.mainDebug("event: %+v", ev)
 				if !validEvent(ev) {
 					break
 				}
@@ -161,7 +160,7 @@ func (e *Engine) watchDir(path string) error {
 				if !e.isIncludeExt(ev.Name) {
 					break
 				}
-				e.watcherDebug("%s has changed", e.config.rel(ev.Name))
+				e.mainDebug("event: %+v", ev)
 				e.eventCh <- ev.Name
 			case err := <-e.watcher.Errors:
 				e.watcherLog("error: %s", err.Error())
@@ -194,14 +193,11 @@ func (e *Engine) watchNewDir(dir string, removeDir bool) {
 
 // Endless loop and never return
 func (e *Engine) start() {
-	firstRunCh := make(chan bool, 1)
-	firstRunCh <- true
-	e.binStopEndCh <- true
-
+	go e.buildRun()
 	for {
 		var filename string
 
-		e.mainLog("firstCh...")
+		e.mainLog("watching file and signal...")
 		select {
 		case <-e.exitCh:
 			return
@@ -212,20 +208,16 @@ func (e *Engine) start() {
 				continue
 			}
 			e.mainLog("%s has changed", e.config.rel(filename))
-		case <-firstRunCh:
-			// go down
-			break
 		}
 
 		e.withLock(func() {
-			e.mainDebug("binRuning: %v", e.binRunning)
 			if e.binRunning {
+				e.mainDebug("binRuning: kill process")
 				e.binStopCh <- true
 			}
 		})
-		e.mainLog("start build run ...")
-
 		<-e.binStopEndCh
+
 		go e.buildRun()
 	}
 }

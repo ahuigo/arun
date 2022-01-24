@@ -83,10 +83,6 @@ func (l *logger) main() logFunc {
 	return l.getLogger("main")
 }
 
-func (l *logger) build() logFunc {
-	return l.getLogger("build")
-}
-
 func (l *logger) runner() logFunc {
 	return l.getLogger("runner")
 }
