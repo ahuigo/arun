@@ -48,7 +48,7 @@ push-docker-image:
 
 
 pkg:
-	{ hash newversion.py && newversion.py version;} 2>/dev/null ;  { echo version `cat version`; }
+	{ hash newversion.py 2>/dev/null && newversion.py version;} ;  { echo version `cat version`; }
 	jfrog "rt" "go-publish" "go-pl" $$(cat version) "--url=$$GOPROXY_API" --user=$$GOPROXY_USER --apikey=$$GOPROXY_PASS
 	v=`cat version` && git tag "$$v" && git push origin "$$v"
 
