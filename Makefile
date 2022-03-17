@@ -1,39 +1,19 @@
 LDFLAGS += -X "main.BuildTimestamp=$(shell date -u "+%Y-%m-%d %H:%M:%S")"
 LDFLAGS += -X "main.Version=$(shell git rev-parse HEAD)"
 
-GO := GO111MODULE=on go
-
-.PHONY: init
-init:
-	go get -u golang.org/x/lint/golint
-	go get -u golang.org/x/tools/cmd/goimports
-	@echo "Install pre-commit hook"
-	@ln -s $(shell pwd)/hooks/pre-commit $(shell pwd)/.git/hooks/pre-commit || true
-	@chmod +x ./hack/check.sh
-
-.PHONY: setup
-setup: init
-	git init
-
-.PHONY: check
-check:
-	@./hack/check.sh ${scope}
-
-.PHONY: ci
-ci: init
-	@$(GO) mod tidy && $(GO) mod vendor
+msg?=
 
 .PHONY: build
-build: check
+build: 
 	$(GO) build -ldflags '$(LDFLAGS)'
 
 .PHONY: install
-install: check
+install:
 	@echo "Installing arun..."
 	@$(GO) install -ldflags '$(LDFLAGS)'
 
 .PHONY: release
-release: check
+release:
 	GOOS=darwin GOARCH=amd64 $(GO) build -ldflags '$(LDFLAGS)' -o bin/darwin/aun
 	GOOS=linux GOARCH=amd64 $(GO) build -ldflags '$(LDFLAGS)' -o bin/linux/arun
 	GOOS=windows GOARCH=amd64 $(GO) build -ldflags '$(LDFLAGS)' -o bin/windows/aun.exe
@@ -49,6 +29,8 @@ push-docker-image:
 
 pkg:
 	{ hash newversion.py 2>/dev/null && newversion.py version;} ;  { echo version `cat version`; }
-	jfrog "rt" "go-publish" "go-pl" $$(cat version) "--url=$$GOPROXY_API" --user=$$GOPROXY_USER --apikey=$$GOPROXY_PASS
+	git commit -am "$(msg)"
+
+	#jfrog "rt" "go-publish" "go-pl" $$(cat version) "--url=$$GOPROXY_API" --user=$$GOPROXY_USER --apikey=$$GOPROXY_PASS
 	v=`cat version` && git tag "$$v" && git push origin "$$v"
 
