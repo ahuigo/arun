@@ -5,9 +5,8 @@ class Arun < Formula
   desc ""
   homepage ""
   url "https://github.com/ahuigo/arun/archive/refs/tags/master.tar.gz"
-  version ""
-  sha256 ""
-  license ""
+  version "v0.1.7"
+  license "MIT"
 
   # depends_on "cmake" => :build
   # depends_on "cmake" => :build
@@ -17,7 +16,9 @@ class Arun < Formula
     # Remove unrecognized options if warned by configure
     # https://rubydoc.brew.sh/Formula.html#std_configure_args-instance_method
     # system "cmake", "-S", ".", "-B", "build", *std_cmake_args
-    bin.install "arun"
+    # for binary
+    # bin.install "arun"
+    system "go", "build", "-trimpath", "-ldflags", "-w -s", "-o", bin/name
   end
 
   test do
@@ -30,6 +31,14 @@ class Arun < Formula
     #
     # The installed folder is not in the path, so use the entire path to any
     # executables being tested: `system "#{bin}/program", "do", "something"`.
-    system "false"
+
+    text = "Hello Homebrew!"
+    task = "hello"
+    (testpath/"Runfile").write <<~EOS
+      #{task}:
+        echo #{text}
+    EOS
+    assert_equal text, shell_output("#{bin}/#{name} #{task}").chomp
+    #system "false"
   end
 end
