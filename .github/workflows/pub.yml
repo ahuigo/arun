@@ -1,11 +1,12 @@
 # refer https://github.com/cosmtrek/air/blob/master/.github/workflows/release.yml
 name: release arun cli command
-on:  
-  push:
-    tags:
-      - '*'
-    tags-ignore:
-      - '2.*'
+on: [push]
+  #on:  
+  #  push:
+  #    tags:
+  #      - '*'
+  #    #tags-ignore:
+  #    #  - '2.*'
 #  push:
 #    branches:
 #    - master
