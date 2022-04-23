@@ -5,5 +5,5 @@ build:
 	brew create https://github.com/ahuigo/arun/archive/refs/tags/master.tar.gz --tap ahuigo/homebrew-arun
 	
 install:
-	brew install ahuigo/tap/arun
+	brew install ahuigo/arun/arun
 	

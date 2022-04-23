@@ -10,6 +10,7 @@ class Arun < Formula
   license ""
 
   # depends_on "cmake" => :build
+  # depends_on "cmake" => :build
 
   def install
     # ENV.deparallelize  # if your formula fails when building in parallel
