@@ -6,22 +6,32 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+    "io/ioutil"
+	"path"
+	"runtime"
+	"strings"
+
 
 	"github.com/ahuigo/arun/runner"
 )
 
+func getVersion() string {
+	_, filename, _, _ := runtime.Caller(0)
+	versionFile := path.Dir(filename) + "/version"
+	version, _ := ioutil.ReadFile(versionFile)
+	return strings.TrimSpace(string(version))
+}
+
 var (
 	cfgPath     string
 	debugMode   bool
-	showVersion bool
+	goVersion   =  runtime.Version()
+	VERSION = getVersion()
 )
 
 func init() {
 	debugMode = true
-	// flag.StringVar(&cfgPath, "c", "", "config path")
-	// flag.BoolVar(&debugMode, "d", false, "debug mode")
-	// flag.BoolVar(&showVersion, "v", false, "show version")
-	// flag.Parse()
+
 }
 
 func main() {
@@ -30,12 +40,9 @@ func main() {
     /   |  _______  ______
    / /| | / ___/ / / / __ \
   / ___ |/ /  / /_/ / / / /
- /_/  |_/_/   \__,_/_/ /_/  v%s // live reload for any command, with Go%s
-`, arunVersion, goVersion)
+ /_/  |_/_/   \__,_/_/ /_/  %s // live reload for any command, with %s
+`, VERSION, goVersion)
 
-	if showVersion {
-		return
-	}
 
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
