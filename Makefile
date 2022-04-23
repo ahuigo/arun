@@ -2,6 +2,8 @@ LDFLAGS += -X "main.BuildTimestamp=$(shell date -u "+%Y-%m-%d %H:%M:%S")"
 LDFLAGS += -X "main.Version=$(shell git rev-parse HEAD)"
 
 msg?=
+GO := GO111MODULE=on go
+
 
 .PHONY: build
 build: 
@@ -20,11 +22,11 @@ release:
 
 .PHONY: docker-image
 docker-image:
-	docker build -t ahuigo/arun:v0.1.1 -f ./Dockerfile .
+	docker build -t ahuigo/arun:`cat version` -f ./Dockerfile .
 
 .PHONY: push-docker-image
 push-docker-image:
-	docker push ahuigo/arun:v0.1.1
+	docker push ahuigo/arun:`cat version`
 
 
 pkg:
