@@ -2,7 +2,6 @@ package runner
 
 import (
 	"runtime"
-	"strings"
 	"testing"
 )
 
@@ -11,10 +10,9 @@ const (
 	cmd = "go build -o ./tmp/main ."
 )
 
-func getWindowsConfig() config {
+func getConfig() config {
 	build := cfgBuild{
 		Cmd:         "go build -o ./tmp/main .",
-		Bin:         "./tmp/main",
 		Log:         "build-errors.log",
 		IncludeExt:  []string{"go", "tpl", "tmpl", "html"},
 		ExcludeDir:  []string{"assets", "tmp", "vendor"},
@@ -22,7 +20,6 @@ func getWindowsConfig() config {
 		StopOnError: true,
 	}
 	if runtime.GOOS == "windows" {
-		build.Bin = bin
 		build.Cmd = cmd
 	}
 
@@ -37,29 +34,9 @@ func TestBinCmdPath(t *testing.T) {
 
 	var err error
 
-	c := getWindowsConfig()
+	c := getConfig()
 	err = c.preprocess()
 	if err != nil {
 		t.Fatal(err)
-	}
-
-	if runtime.GOOS == "windows" {
-
-		if ! strings.HasSuffix(c.Build.Bin, "exe") {
-			t.Fail()
-		}
-
-		if ! strings.Contains(c.Build.Bin, "exe") {
-			t.Fail()
-		}
-	} else {
-
-		if strings.HasSuffix(c.Build.Bin, "exe") {
-			t.Fail()
-		}
-
-		if strings.Contains(c.Build.Bin, "exe") {
-			t.Fail()
-		}
 	}
 }

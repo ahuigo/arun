@@ -14,3 +14,4 @@ tmp/
 .idea
 .DS_Store
 dist/
+/smoke_test/__pycache__
