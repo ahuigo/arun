@@ -44,4 +44,6 @@ pkg:
 	#jfrog "rt" "go-publish" "go-pl" $$(cat version) "--url=$$GOPROXY_API" --user=$$GOPROXY_USER --apikey=$$GOPROXY_PASS
 	v=`cat version` && git tag "$$v" && git push origin "$$v" && git push origin HEAD
 
-
+release: 
+	#goreleaser init
+	goreleaser release --snapshot --rm-dist
