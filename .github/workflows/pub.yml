@@ -30,7 +30,7 @@ jobs:
           go-version: ^1.17
       - name: set GOVERSION
         run: echo "GOVERSION=$(go version | sed -r 's/go version go(.*)\ .*/\1/')" >> $GITHUB_ENV
-      - name: set AirVersion
+      - name: set ArunVersion
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
       - name: show version
         run: echo ${{ env.GOVERSION }} ${{ env.VERSION }}
@@ -40,19 +40,32 @@ jobs:
           version: latest
           args: release --rm-dist
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: login to DockerHub
-        uses: docker/login-action@v1
+          GITHUB_TOKEN: ${{ secrets.CICD_TOKEN }}
+
+  docker:
+    uses: ahuigo/arun/.github/workflows/docker.yml@v1
+    #uses: ./docker.yml@v1
+    with: 
+      run_on: ubuntu-latest
+
+  unittest:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out code
+        uses: actions/checkout@v2
+      - name: setup Go 1.17
+        id: go
+        uses: actions/setup-go@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: push to docker hub
-        id: docker_build
-        uses: docker/build-push-action@v2
+          go-version: ^1.17
+      - name: build
+        run: make build
+      - name: run Unit tests.
+        run: go test  ./... -v -covermode=count -coverprofile=coverage.txt
+      - name: upload Coverage report to CodeCov
+        uses: codecov/codecov-action@v2
         with:
-          push: true
-          tags: cosmtrek/air:${{ env.VERSION }}
-      - name: show docker image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.txt
+          verbose: true

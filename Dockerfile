@@ -7,6 +7,6 @@ ENV GO111MODULE on
 
 COPY . /go/src/github.com/ahuigo/arun
 WORKDIR /go/src/github.com/ahuigo/arun
-RUN make ci && make install
+RUN make install
 
 ENTRYPOINT ["/go/bin/arun"]
