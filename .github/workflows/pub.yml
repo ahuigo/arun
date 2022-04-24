@@ -33,12 +33,11 @@ jobs:
         id: unittest
         run: |
           go test  ./runner -v -covermode=count -coverprofile=coverage.txt
-         if [[ $? == 0 ]]; then
+          if [[ $? == 0 ]]; then
             echo "::set-output name=value1::PASS"
           else
             echo "::set-output name=value1::FAIL"
           fi
-
       # refer https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idoutputs
       - uses: nick-invision/assert-action@v1
         with:
