@@ -43,8 +43,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CICD_TOKEN }}
 
   docker:
-    uses: ahuigo/arun/.github/workflows/docker.yml@v1
-    #uses: ./docker.yml@v1
+    uses: ahuigo/arun/.github/workflows/docker.yml
+    #uses: ./docker.yml
     with: 
       run_on: ubuntu-latest
 
