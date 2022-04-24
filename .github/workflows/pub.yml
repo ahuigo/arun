@@ -17,7 +17,7 @@ on: [push]
 #    - staging
 jobs:
   unittest:
-    name: build
+    name: unittest
     runs-on: ubuntu-latest
     steps:
       - name: check out code
@@ -33,10 +33,17 @@ jobs:
         id: unittest
         run: |
           go test  ./runner -v -covermode=count -coverprofile=coverage.txt
+         if [[ $? == 0 ]]; then
+            echo "::set-output name=value1::PASS"
+          else
+            echo "::set-output name=value1::FAIL"
+          fi
+
+      # refer https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idoutputs
       - uses: nick-invision/assert-action@v1
         with:
           expected: "PASS"
-          actual: ${{ steps.unittest.outputs.value }}
+          actual: ${{ steps.unittest.outputs.value1 }}
       - name: upload Coverage report to CodeCov
         uses: codecov/codecov-action@v2
         with:
