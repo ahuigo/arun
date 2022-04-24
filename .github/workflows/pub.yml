@@ -46,7 +46,6 @@ jobs:
     #uses: ./docker.yml
     uses: ahuigo/arun/.github/workflows/docker.yml@master
     with: 
-      version: latest
       run_on: ubuntu-latest
 
   unittest:
