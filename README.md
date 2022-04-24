@@ -55,7 +55,7 @@ go get -u github.com/ahuigo/arun
 
 
 ## Sponsor
-Most arun's code is migrated from air. If you like it, you could buy Rick Yu a beer.
+Most arun's code is migrated from [air](https://github.com/cosmtrek/air). If you like it, you could buy Rick Yu a beer.
 
 <a href="https://www.buymeacoffee.com/36lcNbW" target="_blank">
     <img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" >
