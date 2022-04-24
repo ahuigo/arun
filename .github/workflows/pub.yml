@@ -41,7 +41,7 @@ jobs:
       # refer https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idoutputs
       - uses: nick-invision/assert-action@v1
         with:
-          expected: "PASS"
+          expected: "PASS1"
           actual: ${{ steps.unittest.outputs.value1 }}
       - name: upload Coverage report to CodeCov
         uses: codecov/codecov-action@v2
@@ -50,6 +50,7 @@ jobs:
           file: ./coverage.txt
           verbose: true
   release:
+    needs: unittest
     name: release
     runs-on: ubuntu-latest
     #if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -76,6 +77,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CICD_TOKEN }}
 
   docker:
+    needs: [unittest, release]
     #uses: ./docker.yml
     uses: ahuigo/arun/.github/workflows/docker.yml@master
     with: 
